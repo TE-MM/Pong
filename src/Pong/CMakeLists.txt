@@ -1,3 +1,41 @@
+if(WINDOWS)
+    set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${PROJECT_SOURCE_DIR}/extlibs/headers")
+
+    if(ARCH_32BITS)
+        set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${PROJECT_SOURCE_DIR}/extlibs/bin/x86")
+        if(COMPILER_GCC)
+            set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${PROJECT_SOURCE_DIR}/extlibs/libs-mingw/x86")
+        elseif(COMPILER_MSVC)
+            set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${PROJECT_SOURCE_DIR}/extlibs/libs-msvc/x86")
+        endif()
+    elseif(ARCH_64BITS)
+        set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${PROJECT_SOURCE_DIR}/extlibs/bin/x64")
+        if(COMPILER_GCC)
+            set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${PROJECT_SOURCE_DIR}/extlibs/libs-mingw/x64")
+        elseif(COMPILER_MSVC)
+            set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${PROJECT_SOURCE_DIR}/extlibs/libs-msvc/x64")
+        endif()
+    endif()
+elseif(MACOSX)
+    set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${PROJECT_SOURCE_DIR}/extlibs/headers")
+    set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${PROJECT_SOURCE_DIR}/extlibs/libs-osx/lib/")
+endif()
+
+include_directories("${PROJECT_SOURCE_DIR}/extlibs/headers")
+include_directories("${PROJECT_SOURCE_DIR}/src")
+
+# this step will be necessary for Linux support
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/Modules")
+
+set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/bin")
+
 # Add Pong executable from dummy main
 add_executable(Pong main.cpp)
-target_link_libraries(Pong sfml-graphics sfml-main sfml-system sfml-window sfml-audio sfml-network)
+find_library(window sfml-window)
+find_library(graphics sfml-graphics)
+find_library(main sfml-main)
+find_library(system sfml-system)
+target_link_libraries(Pong ${window} ${graphics} ${system})
+if(WINDOWS)
+    target_link_libraries(Pong ${main})
+endif()
