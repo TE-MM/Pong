@@ -11,3 +11,10 @@ set(Pong_VERSION_PATCH 0)
 
 # recurse into Pong source where executable is added
 add_subdirectory(src/Pong)
+
+### TESTING ###
+
+include(CTest)
+
+# add testing
+add_subdirectory(test)
