@@ -4,6 +4,7 @@ set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/bin")
 # Add Pong executable from dummy main
 add_executable(Pong main.cpp)
 
+# Link the appropriate libraries for the OS
 if(WINDOWS)
     if(ARCH_32BITS)
         set(SFML_ROOT "C:\\Program Files (x86)\\SFML")
@@ -14,5 +15,7 @@ if(WINDOWS)
     include_directories(${SFML_INCLUDE_DIR})
     target_link_libraries(Pong ${SFML_LIBRARIES})
 elseif(MACOSX)
-    # Figure out appropriate linking
+    find_package(SFML COMPONENTS window graphics system REQUIRED)
+    include_directories(${SFML_INCLUDE_DIR})
+    target_link_libraries(Pong ${SFML_LIBRARIES})
 endif()
