@@ -1,4 +1,4 @@
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/Modules")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/modules")
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/bin")
 
 # Add Pong executable from dummy main
@@ -14,7 +14,7 @@ if(WINDOWS)
     find_package(SFML COMPONENTS window graphics system main REQUIRED)
     include_directories(${SFML_INCLUDE_DIR})
     target_link_libraries(Pong ${SFML_LIBRARIES})
-elseif(MACOSX)
+else()
     find_package(SFML COMPONENTS window graphics system REQUIRED)
     include_directories(${SFML_INCLUDE_DIR})
     target_link_libraries(Pong ${SFML_LIBRARIES})
