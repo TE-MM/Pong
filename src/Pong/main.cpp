@@ -1,4 +1,6 @@
-#include <sfml/graphics.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 #include <valarray>
 
 class ParticleSystem : public sf::Drawable, public sf::Transformable
