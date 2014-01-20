@@ -23,6 +23,11 @@ if(Boost_FOUND)
     target_link_libraries(sfmlcheck ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${SFML_LIBRARIES})
     add_test(SFMLCheck sfmlcheck)
 
+    # Manager Test
+    add_executable(managertest PongTests/manager_test.cpp)
+    target_link_libraries(managertest ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${SFML_LIBRARIES} temm)
+    add_test(ManagerTest managertest)
+
     # Post-build DLL move for SFML binaries (One-time only - done after SFML Check)
     # if(WINDOWS AND NOT SFML_STATIC_LIBRARIES)
     #     foreach(sfml_lib ${SFML_LIBRARIES})

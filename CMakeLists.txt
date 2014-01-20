@@ -26,8 +26,11 @@ else()
     include_directories(${SFML_INCLUDE_DIR})
 endif()
 
-# recurse into Pong source where executable is added
-add_subdirectory(src/Pong)
+# include TEMM include
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# recurse into source
+add_subdirectory(src)
 
 ### TESTING ###
 
