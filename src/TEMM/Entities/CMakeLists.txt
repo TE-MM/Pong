@@ -6,4 +6,4 @@ set(SRC
     ${INCROOT}/ResourceManager.hpp)
 source_group("" FILES {SRC})
 
-add_library(temm ${SRC})
+add_library(temm-entities ${SRC})

@@ -30,7 +30,8 @@ endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # recurse into source
-add_subdirectory(src)
+add_subdirectory(src/TEMM)
+add_subdirectory(src/Pong)
 
 ### TESTING ###
 

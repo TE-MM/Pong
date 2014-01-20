@@ -9,13 +9,5 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/lib")
 
 # Add subdirectories for each library
-add_subdirectory(TEMM/Entities)
+add_subdirectory(Entities)
 
-#######################################################
-### The Pong game itself is an executable.
-#######################################################
-
-# Set executable output
-set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/bin")
-
-add_subdirectory(Pong)

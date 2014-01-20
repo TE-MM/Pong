@@ -25,7 +25,7 @@ if(Boost_FOUND)
 
     # Manager Test
     add_executable(managertest PongTests/manager_test.cpp)
-    target_link_libraries(managertest ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${SFML_LIBRARIES} temm)
+    target_link_libraries(managertest ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${SFML_LIBRARIES} temm-entities)
     add_test(ManagerTest managertest)
 
     # Post-build DLL move for SFML binaries (One-time only - done after SFML Check)
