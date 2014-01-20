@@ -11,6 +11,8 @@ more ambitious projects in the future.
 Authors
 -------
 
-Tanner Evins: Project Manager (tanner.evins@gmail.com)
-Matthew Miller: Chief Implementer (mattdeanmiller@gmail.com)
+Tanner Evins: Manager and Designer
+              (tanner.evins@gmail.com)
+Matthew Miller: Chief Implementer
+                (mattdeanmiller@gmail.com)
 
