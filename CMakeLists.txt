@@ -12,7 +12,7 @@ set(Pong_VERSION_PATCH 0)
 # set paths
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/modules")
 
-# link the appropriate libraries for the OS
+# link the appropriate SFML libraries for the OS
 if(WINDOWS)
     if(ARCH_32BITS)
         set(SFML_ROOT "C:\\Program Files (x86)\\SFML")
@@ -26,8 +26,13 @@ else()
     include_directories(${SFML_INCLUDE_DIR})
 endif()
 
-# include TEMM include
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+# find Boost libraries
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_MULTITHREADED ON)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+
+# include TEMM include and Boost include
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
 
 # recurse into source
 add_subdirectory(src/TEMM)
