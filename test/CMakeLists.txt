@@ -18,9 +18,9 @@ target_link_libraries(sfmlcheck ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${SFML_LIBR
 add_test(SFMLCheck sfmlcheck)
 
 # Manager Test
-add_executable(managertest PongTests/manager_test.cpp)
-target_link_libraries(managertest ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${SFML_LIBRARIES} temm-entities)
-add_test(ManagerTest managertest)
+add_executable(entitytests PongTests/entity_tests.cpp)
+target_link_libraries(entitytests ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} ${SFML_LIBRARIES} temm-entities)
+add_test(EntityTests entitytests)
 
 # Post-build DLL move for SFML binaries (One-time only - done after SFML Check)
 # if(WINDOWS AND NOT SFML_STATIC_LIBRARIES)
