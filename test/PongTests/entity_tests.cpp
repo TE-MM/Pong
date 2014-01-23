@@ -44,9 +44,7 @@ private:
 ////////////////////////////////////////////////////////////
 int shareThread(const temm::PoolPtr<PhoneyComponey>& ptr) {
 	temm::Entity e;
-	temm::ComponentPtr<PhoneyComponey> comp_ptr(ptr->lock(e));
-	bool yes_or_no = comp_ptr.hasResource();
-	BOOST_CHECK_EQUAL(yes_or_no, true);
+	temm::component_index index = ptr->lock(e);
 	return 0;
 }
 
@@ -207,7 +205,7 @@ BOOST_AUTO_TEST_SUITE(EntitiesAndPoolsSuite)
 
 			// Acquire available resource for entity e
 			// Initialize weak pointer
-			temm::ComponentPtr<PhoneyComponey> comp_ptr(ptr->lock(e));
+			temm::component_index index = ptr->lock(e);
 
 			// Resource pool should have 15 free resources
 			unsigned inner_acquired = ptr->acquired();
@@ -217,7 +215,7 @@ BOOST_AUTO_TEST_SUITE(EntitiesAndPoolsSuite)
 			BOOST_CHECK_NO_THROW(e.update(1, temm::FRAMES_PER_SECOND));
 
 			// Check that component updated accordingly
-			unsigned value = comp_ptr->getValue();
+			unsigned value = ptr[index].getValue();
 			BOOST_CHECK_EQUAL(value, 1);
 
 			// Entity knows how many components it has
@@ -262,8 +260,8 @@ BOOST_AUTO_TEST_SUITE(EntitiesAndPoolsSuite)
 		// At this point, the thread has finished executing. The
 		// resources acquired by the thread should be freed,
 		// allowing our entity to acquire the last free resource.
-		temm::ComponentPtr<PhoneyComponey> comp_ptr(ptr->lock(e));
-		bool yes_or_no = comp_ptr.hasResource();
+		temm::component_index index = ptr->lock(e);
+		bool yes_or_no = (index < 4);
 		BOOST_CHECK_EQUAL(yes_or_no, true);
 
 	}
@@ -284,7 +282,7 @@ BOOST_AUTO_TEST_SUITE(EntitiesAndPoolsSuite)
 
 		// Acquire outer pool resource and initialize weak
 		// pointer to a variable
-		temm::ComponentPtr<PhoneyComponey> comp_ptr(outer_ptr->lock(e));
+		temm::component_index index = outer_ptr->lock(e);
 
 		{ // Inner scope for our resource pool
 
@@ -300,7 +298,7 @@ BOOST_AUTO_TEST_SUITE(EntitiesAndPoolsSuite)
 		BOOST_CHECK_NO_THROW(e.update(1, temm::FRAMES_PER_SECOND));
 
 		// Existing component should have updated
-		unsigned value = comp_ptr->getValue();
+		unsigned value = outer_ptr[index].getValue();
 		BOOST_CHECK_EQUAL(value, 1);
 
 		// Entity should be aware that it no longer has inner scoped component
@@ -320,10 +318,10 @@ BOOST_AUTO_TEST_SUITE(EntitiesAndPoolsSuite)
 		// Create pool and entity, and acquire a resource
 		temm::PoolPtr<PhoneyComponey> ptr(4);
 		temm::Entity e;
-		temm::ComponentPtr<PhoneyComponey> cmp(ptr->lock(e));
+		temm::component_index index = ptr->lock(e);
 
 		// Release the resource
-		cmp.release();
+		ptr[index].release();
 
 		// Check that it has been properly released
 		unsigned num_components = e.numComponents();
@@ -348,17 +346,17 @@ BOOST_AUTO_TEST_SUITE(EntitiesAndPoolsSuite)
 		temm::PoolPtr<PhoneyComponey> ptr(2);
 
 		// Acquire resources
-		temm::ComponentPtr<PhoneyComponey> c0(ptr->lock(e0));
-		temm::ComponentPtr<PhoneyComponey> c1(ptr->lock(e1));
+		temm::component_index c0 = ptr->lock(e0);
+		temm::component_index c1 = ptr->lock(e1);
 
 		ptr->update(1, temm::FRAMES_PER_SECOND);
 
 		// Check component c0
-		unsigned value = c0->getValue();
+		unsigned value = ptr[c0].getValue();
 		BOOST_CHECK_EQUAL(value, 1);
 
 		// Check component c1
-		value = c1->getValue();
+		value = ptr[c1].getValue();
 		BOOST_CHECK_EQUAL(value, 1);
 
 	}

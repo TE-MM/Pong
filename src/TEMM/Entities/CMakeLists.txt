@@ -6,7 +6,6 @@ set(SRC
     ${INCROOT}/Component.hpp
     ${SRCROOT}/Entity.cpp
     ${INCROOT}/Entity.hpp
-    ${SRCROOT}/ComponentPool.cpp
     ${INCROOT}/ComponentPool.hpp)
 source_group("" FILES {SRC})
 

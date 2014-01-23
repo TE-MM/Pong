@@ -16,7 +16,6 @@
 
 
 namespace temm {
-class Entity;
 
 ////////////////////////////////////////////////////////////
 /// \brief Constants passed to Component::update()
@@ -76,6 +75,9 @@ public:
 	void release();
 
 private:
+
+	friend class Entity;
+	template <class C> friend class ComponentPool;
 
 	Component(const Component&);
 	Component& operator=(const Component&);

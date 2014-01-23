@@ -17,59 +17,16 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
+#include <TEMM/Entities/Entity.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <stdexcept>
 
 
 namespace temm {
-template<class C> class ComponentPool;
 template<class C> class PoolPtr;
-class Entity;
 
-template<class C>
-class ComponentPtr {
-public:
-
-	void release() {
-		boost::shared_ptr<ComponentPool<C> > ptr = m_pool.lock();
-		(*ptr)[m_index].release();
-	}
-
-	bool hasResource() {
-		boost::shared_ptr<ComponentPool<C> > ptr = m_pool.lock();
-		if (ptr) return true;
-		return false;
-	}
-
-	C& operator*() const {
-		boost::shared_ptr<ComponentPool<C> > ptr = m_pool.lock();
-		if (!ptr) throw std::runtime_error;
-		return (*ptr)[m_index];
-	}
-
-	C* operator->() const {
-		boost::shared_ptr<ComponentPool<C> > ptr = m_pool.lock();
-		if (!ptr) throw new std::runtime_error("Dereferencing deleted component.");
-		return &(*ptr)[m_index];
-	}
-
-private:
-
-	friend class ComponentPool<C>;
-
-	ComponentPtr(unsigned index, boost::weak_ptr<ComponentPool<C> > pool) :
-		m_index(index),
-		m_pool(pool) {
-	}
-	
-	////////////////////////////////////////////////////////////
-	/// Member data
-	////////////////////////////////////////////////////////////
-	unsigned                           m_index; ///< Index to resource
-	boost::weak_ptr<ComponentPool<C> > m_pool;  ///< Weak reference to component pool
-};
-
+typedef unsigned component_index;
 
 template<class C>
 class ComponentPool {
@@ -81,36 +38,36 @@ public:
 	////////////////////////////////////////////////////////////
 	~ComponentPool() {
 		delete[] m_pool;
-		delete[] m_available;
 	}
 
-	ComponentPtr<C> lock(Entity& entity) {
+	component_index lock(Entity& entity) {
 		unsigned i = 0;
 		for (; i < SIZE; ++i) {
-			if (m_available[i] == true) m_available[i] = false;
+			if (m_pool[i].m_entity == 0 ) {
+				entity.attach(m_pool[i]);
+				break;
+			}
 		}
-		if (i < SIZE) {
-			entity.attach(m_pool[i]);
-			++m_acquired;
-			boost::shared_ptr<ComponentPool<C> > s_ptr(this);
-			boost::weak_ptr<ComponentPool<C> > w_ptr(s_ptr);
-			return ComponentPtr<C>(i, w_ptr);
-		}
-		boost::weak_ptr<ComponentPool<C> > w_ptr;
-		return ComponentPtr<C>(0, w_ptr);
+		return i;
 	}
 
 	void update(int delta, DeltaType delta_type) {
 		for (unsigned i = 0; i < SIZE; ++i) {
-			if (m_available[i] == false) m_pool[i].update(delta, delta_type);
+			if (m_pool[i].m_entity != 0) m_pool[i].update(delta, delta_type);
 		}
 	}
 
 	unsigned acquired() {
-		return m_acquired;
+		unsigned acquired = 0;
+		for (unsigned i = 0; i < SIZE; ++i) {
+			if (m_pool[i].m_entity != 0) {
+				acquired++;
+			}
+		}
+		return acquired;
 	}
 
-	C& operator[](unsigned index) {
+	C& operator[](component_index index) {
 		if (index < SIZE) return m_pool[index];
 		throw new std::out_of_range("We require more minerals. Pool too small.");
 	}
@@ -125,19 +82,17 @@ private:
 	////////////////////////////////////////////////////////////
 	ComponentPool(unsigned number):
 		m_pool(new C[number]),
-		m_available(new bool[number]),
+		//m_available(new bool[number]),
+		//m_acquired(0),
 		SIZE(number) {
-		for (unsigned i = 0; i < SIZE; ++i) {
-			m_available[i] = true;
-		}
 	}
 
 	////////////////////////////////////////////////////////////
 	/// Member data
 	////////////////////////////////////////////////////////////
 	C*             m_pool;      ///< Actual pool
-	bool*          m_available; ///< Availablility index
-	unsigned       m_acquired;  ///< Number of locked resources
+	//bool*          m_available; ///< Availablility index
+	//unsigned       m_acquired;  ///< Number of locked resources
 	const unsigned SIZE;        ///< Size of pool
 };
 
@@ -162,6 +117,10 @@ public:
 
 	ComponentPool<C>& operator*() const {
 		return *m_pool;
+	}
+
+	C& operator[](component_index index) {
+		return (*m_pool)[index];
 	}
 
 private:

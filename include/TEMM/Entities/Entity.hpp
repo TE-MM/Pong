@@ -64,7 +64,10 @@ public:
 	/// composite entity. Once part of the entity, the component
 	/// cannot be attached to another.
 	///
+	/// Returns true if successfully attached.
+	///
 	/// \param component The component to be attached to
+	/// \return Success of attachment
 	///
 	////////////////////////////////////////////////////////////
 	bool attach(Component& component);
@@ -78,6 +81,8 @@ public:
 	unsigned numComponents();
 
 private:
+
+	friend class Component;
 
 	Entity(const Entity&);
 	Entity& operator=(const Entity&);
