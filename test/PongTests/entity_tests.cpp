@@ -13,7 +13,6 @@
 
 #include <TEMM/Entities/Component.hpp>
 #include <TEMM/Entities/Entity.hpp>
-#include <TEMM/Entities/ComponentPool.hpp>
 #include <SFML/System.hpp>
 #include <boost/shared_ptr.hpp>
 #define BOOST_TEST_MODULE ManagerTest
