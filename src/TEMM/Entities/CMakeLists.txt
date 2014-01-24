@@ -5,8 +5,7 @@ set(SRC
     ${SRCROOT}/Component.cpp
     ${INCROOT}/Component.hpp
     ${SRCROOT}/Entity.cpp
-    ${INCROOT}/Entity.hpp
-    ${INCROOT}/ComponentPool.hpp)
+    ${INCROOT}/Entity.hpp)
 source_group("" FILES {SRC})
 
 add_library(temm-entities ${SRC})
