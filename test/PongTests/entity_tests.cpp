@@ -37,17 +37,6 @@ private:
 	unsigned updatee;
 };
 
-////////////////////////////////////////////////////////////
-/// Dummy function that expects to successfully acquire a
-/// resource
-///
-////////////////////////////////////////////////////////////
-int shareThread(const temm::PoolPtr<PhoneyComponey>& ptr) {
-	temm::Entity e;
-	temm::component_index index = ptr->lock(e);
-	return 0;
-}
-
 
 ////////////////////////////////////////////////////////////
 /// Test Suite: Entities and Components

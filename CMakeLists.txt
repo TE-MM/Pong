@@ -7,7 +7,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake)
 # version number
 set(Pong_VERSION_MAJOR 0)
 set(Pong_VERSION_MINOR 0)
-set(Pong_VERSION_PATCH 0)
+set(Pong_VERSION_PATCH 1)
 
 # set paths
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/modules")
@@ -25,11 +25,6 @@ else()
     find_package(SFML 2 COMPONENTS window graphics system REQUIRED)
     include_directories(${SFML_INCLUDE_DIR})
 endif()
-
-# find Boost libraries
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_MULTITHREADED ON)
-find_package(Boost COMPONENTS unit_test_framework thread system date_time chrono REQUIRED)
 
 # include TEMM include and Boost include
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
