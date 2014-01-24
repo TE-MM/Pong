@@ -29,7 +29,7 @@ endif()
 # find Boost libraries
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework thread system date_time chrono REQUIRED)
 
 # include TEMM include and Boost include
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})

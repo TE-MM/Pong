@@ -20,6 +20,7 @@
 #include <TEMM/Entities/Entity.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <boost/thread/mutex.hpp>
 #include <stdexcept>
 
 
@@ -41,8 +42,9 @@ public:
 	}
 
 	component_index lock(Entity& entity) {
+		boost::mutex::scoped_lock lock(m_mutex);
 		unsigned i = 0;
-		for (; i < SIZE; ++i) {
+		for (; i < M_SIZE; ++i) {
 			if (m_pool[i].m_entity == 0 ) {
 				entity.attach(m_pool[i]);
 				break;
@@ -52,14 +54,16 @@ public:
 	}
 
 	void update(int delta, DeltaType delta_type) {
-		for (unsigned i = 0; i < SIZE; ++i) {
+		boost::mutex::scoped_lock lock(m_mutex);
+		for (unsigned i = 0; i < M_SIZE; ++i) {
 			if (m_pool[i].m_entity != 0) m_pool[i].update(delta, delta_type);
 		}
 	}
 
 	unsigned acquired() {
+		boost::mutex::scoped_lock lock(m_mutex);
 		unsigned acquired = 0;
-		for (unsigned i = 0; i < SIZE; ++i) {
+		for (unsigned i = 0; i < M_SIZE; ++i) {
 			if (m_pool[i].m_entity != 0) {
 				acquired++;
 			}
@@ -68,7 +72,8 @@ public:
 	}
 
 	C& operator[](component_index index) {
-		if (index < SIZE) return m_pool[index];
+		boost::mutex::scoped_lock lock(m_mutex);
+		if (index < M_SIZE) return m_pool[index];
 		throw new std::out_of_range("We require more minerals. Pool too small.");
 	}
 
@@ -84,16 +89,18 @@ private:
 		m_pool(new C[number]),
 		//m_available(new bool[number]),
 		//m_acquired(0),
-		SIZE(number) {
+		M_SIZE(number) {
 	}
+
+	ComponentPool(const ComponentPool&);
+	ComponentPool& operator=(const ComponentPool&);
 
 	////////////////////////////////////////////////////////////
 	/// Member data
 	////////////////////////////////////////////////////////////
-	C*             m_pool;      ///< Actual pool
-	//bool*          m_available; ///< Availablility index
-	//unsigned       m_acquired;  ///< Number of locked resources
-	const unsigned SIZE;        ///< Size of pool
+	C*             m_pool;  ///< Actual pool
+	const unsigned M_SIZE;  ///< M_SIZE of pool
+	boost::mutex   m_mutex; ///< Mutex for thread safety
 };
 
 
