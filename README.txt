@@ -11,8 +11,8 @@ more ambitious projects in the future.
 Authors
 -------
 
-Tanner Evins: Manager and Designer
-              (tanner.evins@gmail.com)
-Matthew Miller: Chief Implementer
+Tanner Evins: Library Designer and Programmer
+              (tannerevins@gmail.com)
+Matthew Miller: Game Designer and Programmer
                 (mattdeanmiller@gmail.com)
 

@@ -8,6 +8,6 @@ set(CTEST_PROJECT_NAME "Pong")
 set(CTEST_NIGHTLY_START_TIME "01:00:00 UTC")
 
 set(CTEST_DROP_METHOD "http")
-set(CTEST_DROP_SITE "75.65.4.28:5556")
-set(CTEST_DROP_LOCATION "/CDash/submit.php?project=Pong")
+set(CTEST_DROP_SITE "tannerevins.com")
+set(CTEST_DROP_LOCATION "/Pong/CDash/submit.php?project=Pong")
 set(CTEST_DROP_SITE_CDASH TRUE)
